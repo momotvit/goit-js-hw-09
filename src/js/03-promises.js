@@ -2,12 +2,14 @@
  import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const formEl = document.querySelector('.form');
+const btn = document.querySelector('button');
+console.log(btn);
 
 formEl.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(event) {
   event.preventDefault();
-
+  btn.setAttribute('disabled', 'true');
   const { delay, step, amount } = event.currentTarget.elements;
   let delayValue = Number(delay.value);
   let stepValue = Number(step.value);
@@ -16,7 +18,7 @@ function onFormSubmit(event) {
   for (let i = 1; i <= amountValue; i += 1) {
     createPromise(i, delayValue + (i - 1) * stepValue)
       .then(({ position, delay }) => {
-        Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`, {
+        Notify.success(`Fulfilled promise ${position} in ${delay}ms`, {
                 className: 'notiflix-report',
                 width: '320px',
                 backgroundColor: '#f8f8f8',
@@ -47,7 +49,7 @@ function onFormSubmit(event) {
         });
       })
       .catch(({ position, delay }) => {
-        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`,{
+        Notify.failure(`Rejected promise ${position} in ${delay}ms`,{
                 className: 'notiflix-report',
                 width: '320px',
                 backgroundColor: '#f8f8f8',
@@ -76,10 +78,11 @@ function onFormSubmit(event) {
                 buttonColor: '#fff',
                 backOverlayColor: 'rgba(255,85,73,0.2)',
         });
+
       });
    
   }
-  
+  btn.removeAttribute('disabled');
 }
 
 function createPromise(position, delay) {
